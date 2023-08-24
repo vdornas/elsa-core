@@ -1,3 +1,4 @@
+using System.Dynamic;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -17,7 +18,7 @@ public class FormUrlEncodedHttpContentFactory : IHttpContentFactory
     public HttpContent CreateHttpContent(object content, string? contentType = null) => new FormUrlEncodedContent(GetContentAsDictionary(content));
 
     private static Dictionary<string, string> GetContentAsDictionary(object content) =>
-        (content is string or JsonObject
+        (content is string or JsonObject or ExpandoObject
             ? JsonSerializer.Deserialize<Dictionary<string, string>>(JsonSerializer.Serialize(content))
             : (Dictionary<string, string>)Convert.ChangeType(content, typeof(Dictionary<string, string>)))!;
 }
